@@ -1,12 +1,38 @@
 #!ipxe
 ###
-### netboot.xyz-custom menu
+### Custom PXE menu for Ubuntu 22.04 LTS autoinstall
 ###
 
-:start
-echo Hello world!
-sleep 10
-goto custom_exit
+:custom
+clear
+menu Ubuntu 22.04 LTS PXE Boot Menu
+item --gap --- Kernel / Initrd Options ---
+item option_kernel   Load Ubuntu 22.04 LTS Kernel & Initrd
+item option_iso      Fallback: Boot Ubuntu 22.04 ISO via memdisk
+item --gap --- Other Options ---
+item option_submenu  Load test submenu
+item option_exit     Exit PXE / Chain to utils
+choose choice || goto custom_exit
+goto ${choice}
 
-:custom_exit
-exit 0
+:option_kernel
+echo Loading Ubuntu 22.04 LTS Kernel & Initrd...
+kernel http://<PXE_SERVER>/ubuntu/2204LTS/vmlinuz
+initrd http://<PXE_SERVER>/ubuntu/2204LTS/initrd
+imgargs vmlinuz autoinstall ds=nocloud-net;s=http://<PXE_SERVER>/ubuntu/2204LTS/autoinstall/ ---
+boot || goto custom_exit
+
+:option_iso
+echo Booting Ubuntu 22.04 ISO via memdisk...
+kernel http://<PXE_SERVER>/tools/memdisk iso
+initrd http://<PXE_SERVER>/ubuntu/2204LTS/ubuntu-22.04-live-server-amd64.iso
+boot || goto custom_exit
+
+:option_submenu
+echo Loading additional submenu...
+chain http://<PXE_SERVER>/test.ipxe || goto custom
+
+:option_exit
+echo Exiting PXE menu...
+chain http://<PXE_SERVER>/utils.ipxe
+exit
