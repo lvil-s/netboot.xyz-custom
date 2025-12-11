@@ -1,31 +1,63 @@
 #!ipxe
 ###
-### Custom PXE menu for Ubuntu 22.04 LTS autoinstall
+### Custom PXE menu for Ubuntu autoinstall
 ###
 
 :custom
 clear
-menu Ubuntu 22.04 LTS PXE Boot Menu
-item --gap --- Kernel / Initrd Options ---
-item option_kernel   Load Ubuntu 22.04 LTS Kernel & Initrd
-item option_iso      Fallback: Boot Ubuntu 22.04 ISO via memdisk
+menu Sereact Custom PXE Boot Menu
+item --gap --- Ubuntu 22.04 LTS ---
+item option_2204_kernel  Load Ubuntu 22.04 LTS Kernel & Initrd
+item option_2204_iso     Fallback: Boot Ubuntu 22.04 ISO via memdisk
+item --gap --- Ubuntu 24.04 LTS ---
+item option_2404_kernel  Load Ubuntu 24.04 LTS Kernel & Initrd
+item option_2404_iso     Fallback: Boot Ubuntu 24.04 ISO via memdisk
+item --gap --- Ubuntu 26.06 Testing ---
+item option_2606_kernel  Load Ubuntu 26.06 Testing Kernel & Initrd
+item option_2606_iso     Fallback: Boot Ubuntu 26.06 ISO via memdisk
 item --gap --- Other Options ---
-item option_submenu  Load test submenu
-item option_exit     Exit PXE / Chain to utils
+item option_submenu      Load test submenu
+item option_exit         Exit PXE / Chain to utils
 choose choice || goto custom_exit
 goto ${choice}
 
-:option_kernel
+:option_2204_kernel
 echo Loading Ubuntu 22.04 LTS Kernel & Initrd...
 kernel http://<PXE_SERVER>/ubuntu/2204LTS/vmlinuz
 initrd http://<PXE_SERVER>/ubuntu/2204LTS/initrd
 imgargs vmlinuz autoinstall ds=nocloud-net;s=http://<PXE_SERVER>/ubuntu/2204LTS/autoinstall/ ---
 boot || goto custom_exit
 
-:option_iso
+:option_2204_iso
 echo Booting Ubuntu 22.04 ISO via memdisk...
 kernel http://<PXE_SERVER>/tools/memdisk iso
 initrd http://<PXE_SERVER>/ubuntu/2204LTS/ubuntu-22.04-live-server-amd64.iso
+boot || goto custom_exit
+
+:option_2404_kernel
+echo Loading Ubuntu 24.04 LTS Kernel & Initrd...
+kernel http://<PXE_SERVER>/ubuntu/2404LTS/vmlinuz
+initrd http://<PXE_SERVER>/ubuntu/2404LTS/initrd
+imgargs vmlinuz autoinstall ds=nocloud-net;s=http://<PXE_SERVER>/ubuntu/2404LTS/autoinstall/ ---
+boot || goto custom_exit
+
+:option_2404_iso
+echo Booting Ubuntu 24.04 ISO via memdisk...
+kernel http://<PXE_SERVER>/tools/memdisk iso
+initrd http://<PXE_SERVER>/ubuntu/2404LTS/ubuntu-24.04-live-server-amd64.iso
+boot || goto custom_exit
+
+:option_2606_kernel
+echo Loading Ubuntu 26.06 Testing Kernel & Initrd...
+kernel http://<PXE_SERVER>/ubuntu/2606testing/vmlinuz
+initrd http://<PXE_SERVER>/ubuntu/2606testing/initrd
+imgargs vmlinuz autoinstall ds=nocloud-net;s=http://<PXE_SERVER>/ubuntu/2606testing/autoinstall/ ---
+boot || goto custom_exit
+
+:option_2606_iso
+echo Booting Ubuntu 26.06 ISO via memdisk...
+kernel http://<PXE_SERVER>/tools/memdisk iso
+initrd http://<PXE_SERVER>/ubuntu/2606testing/ubuntu-26.06-live-server-amd64.iso
 boot || goto custom_exit
 
 :option_submenu
