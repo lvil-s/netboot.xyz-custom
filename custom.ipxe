@@ -23,48 +23,48 @@ goto ${choice}
 
 :option_2204_kernel
 echo Loading Ubuntu 22.04 LTS Kernel & Initrd...
-kernel http://<PXE_SERVER>/ubuntu/2204LTS/vmlinuz
-initrd http://<PXE_SERVER>/ubuntu/2204LTS/initrd
-imgargs vmlinuz autoinstall ds=nocloud-net;s=http://<PXE_SERVER>/ubuntu/2204LTS/autoinstall/ ---
+kernel http://${next-server}/ubuntu/2204LTS/vmlinuz
+initrd http://${next-server}/ubuntu/2204LTS/initrd
+imgargs vmlinuz autoinstall ds=nocloud-net;s=http://${next-server}/ubuntu/2204LTS/autoinstall/ ---
 boot || goto custom_exit
 
 :option_2204_iso
 echo Booting Ubuntu 22.04 ISO via memdisk...
-kernel http://<PXE_SERVER>/tools/memdisk iso
-initrd http://<PXE_SERVER>/ubuntu/2204LTS/ubuntu-22.04-live-server-amd64.iso
+kernel http://${next-server}/tools/memdisk iso
+initrd http://${next-server}/ubuntu/2204LTS/ubuntu-22.04-live-server-amd64.iso
 boot || goto custom_exit
 
 :option_2404_kernel
 echo Loading Ubuntu 24.04 LTS Kernel & Initrd...
-kernel http://<PXE_SERVER>/ubuntu/2404LTS/vmlinuz
-initrd http://<PXE_SERVER>/ubuntu/2404LTS/initrd
-imgargs vmlinuz autoinstall ds=nocloud-net;s=http://<PXE_SERVER>/ubuntu/2404LTS/autoinstall/ ---
+kernel http://${next-server}/ubuntu/2404LTS/vmlinuz
+initrd http://${next-server}/ubuntu/2404LTS/initrd
+imgargs vmlinuz autoinstall ds=nocloud-net;s=http://${next-server}/ubuntu/2404LTS/autoinstall/ ---
 boot || goto custom_exit
 
 :option_2404_iso
 echo Booting Ubuntu 24.04 ISO via memdisk...
-kernel http://<PXE_SERVER>/tools/memdisk iso
-initrd http://<PXE_SERVER>/ubuntu/2404LTS/ubuntu-24.04-live-server-amd64.iso
+kernel http://${next-server}/tools/memdisk iso
+initrd http://${next-server}/ubuntu/2404LTS/ubuntu-24.04-live-server-amd64.iso
 boot || goto custom_exit
 
 :option_2606_kernel
 echo Loading Ubuntu 26.06 Testing Kernel & Initrd...
-kernel http://<PXE_SERVER>/ubuntu/2606testing/vmlinuz
-initrd http://<PXE_SERVER>/ubuntu/2606testing/initrd
-imgargs vmlinuz autoinstall ds=nocloud-net;s=http://<PXE_SERVER>/ubuntu/2606testing/autoinstall/ ---
+kernel http://${next-server}/ubuntu/2606testing/vmlinuz
+initrd http://${next-server}/ubuntu/2606testing/initrd
+imgargs vmlinuz autoinstall ds=nocloud-net;s=http://${next-server}/ubuntu/2606testing/autoinstall/ ---
 boot || goto custom_exit
 
 :option_2606_iso
 echo Booting Ubuntu 26.06 ISO via memdisk...
-kernel http://<PXE_SERVER>/tools/memdisk iso
-initrd http://<PXE_SERVER>/ubuntu/2606testing/ubuntu-26.06-live-server-amd64.iso
+kernel http://${next-server}/tools/memdisk iso
+initrd http://${next-server}/ubuntu/2606testing/ubuntu-26.06-live-server-amd64.iso
 boot || goto custom_exit
 
 :option_submenu
 echo Loading additional submenu...
-chain http://<PXE_SERVER>/test.ipxe || goto custom
+chain http://${next-server}/test.ipxe || goto custom
 
 :option_exit
 echo Exiting PXE menu...
-chain http://<PXE_SERVER>/utils.ipxe
+chain http://${next-server}/utils.ipxe
 exit
